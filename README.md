@@ -1,1 +1,25 @@
-# Cin-suivi-
+name: Build APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip
+        run: unzip -o Cinesuivi.zip
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Setup Android
+        uses: android-actions/setup-android@v3
+      - name: Grant permission
+        run: chmod +x gradlew
+      - name: Build APK
+        run:./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cinesuivi-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
